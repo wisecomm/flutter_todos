@@ -43,10 +43,10 @@ class MyHomePage extends StatefulWidget {
 }
 
 class Todo {
-  final String title;
+  final String note;
   final String description;
 
-  Todo(this.title, this.description);
+  Todo(this.note, this.description);
 }
 
 class _MyHomePageState extends State<MyHomePage> {
@@ -61,16 +61,17 @@ class _MyHomePageState extends State<MyHomePage> {
     
     return BlocBuilder<TodosBloc, TodosState>(
         builder: (context, state) {
+//          final todos11 = (state as TodosLoaded).todos;
 
     return Scaffold(
         appBar: AppBar(
-          title: Text(""),
+          title: Text('bloc todo first sample'),
         ),
         body: ListView.builder(
           itemCount: todos.length,
           itemBuilder: (context, index) {
             return ListTile(
-              title: Text(todos[index].title),
+              title: Text(todos[index].note),
               onTap: () {
                 Navigator.push(context, 
                   MaterialPageRoute(
