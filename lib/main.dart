@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_todos/bloc_todo/todos_state.dart';
 import './bloc_todo/todos_bloc.dart';
 
 void main() => runApp(MyApp());
@@ -41,53 +42,48 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+class Todo {
+  final String title;
+  final String description;
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
+  Todo(this.title, this.description);
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+
+  final List<Todo> todos = List.generate(
+    20, (i) => Todo('Todo $i', 'A description of what needs to be done for Todo $i'));
+
 
   @override
   Widget build(BuildContext context) {
-    final TodosBloc todosBloc = BlocProvider.of<TodosBloc>(context);
+    final todosBloc = BlocProvider.of<TodosBloc>(context);
+    
+    return BlocBuilder<TodosBloc, TodosState>(
+        builder: (context, state) {
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: BlocBuilder(
-             bloc: todosBloc,
-        builder: (context, state) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              '$state',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.display1,
-            ),
-          ],
+        appBar: AppBar(
+          title: Text(""),
         ),
-      );
-        }
-      ),
+        body: ListView.builder(
+          itemCount: todos.length,
+          itemBuilder: (context, index) {
+            return ListTile(
+              title: Text(todos[index].title),
+              onTap: () {
+                Navigator.push(context, 
+                  MaterialPageRoute(
+//                    builder: (context) => ListTodoDetail(description: todos[index].description),
+                  ),
+                );
+              },
+            );
+          }
+        ),
+    );
 
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+        }
     );
   }
 }
