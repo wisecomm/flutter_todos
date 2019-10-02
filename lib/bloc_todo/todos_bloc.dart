@@ -4,6 +4,8 @@ import 'package:bloc/bloc.dart';
 import './todos_event.dart';
 import './todos_state.dart';
 
+import './todo.dart';
+
 class TodosBloc extends Bloc<TodosEvent, TodosState> {
 
   TodosBloc()
@@ -39,10 +41,18 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
 
   Stream<TodosState> _mapLoadTodosToState() async* {
     try {
-//      final todos = await this.todosRepository.loadTodos();
+      final List<Todo> todos = List.generate(
+        20, (i) => Todo('Todo $i', 'A description of what needs to be done for Todo $i', note: 'Todo $i'));
       yield TodosLoaded(
-//        todos.map(Todo.fromEntity).toList(),
+        todos,
       );
+
+/*      
+        final todos = await this.todosRepository.loadTodos();
+      yield TodosLoaded(
+        todos.map(Todo.fromEntity).toList(),
+      );
+*/      
     } catch (_) {
       yield TodosNotLoaded();
     }
