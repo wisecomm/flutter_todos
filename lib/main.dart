@@ -8,6 +8,7 @@ import './bloc_todo/todo.dart';
 import './loading_indicator.dart';
 
 import './bloc_todo/todos_event.dart';
+import './list_todo_detail.dart';
 
 void main() => runApp(MyApp());
 
@@ -43,25 +44,29 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     final todosBloc = BlocProvider.of<TodosBloc>(context);
-    
-    return BlocBuilder<TodosBloc, TodosState>(
-        builder: (context, state) {
-          List<Todo> todos = List<Todo>();
-        if (state is TodosLoaded) {
-          todos = state.todos;
-        } else if (state is TodosLoading) {
-          todosBloc.dispatch(LoadTodos());
-          return LoadingIndicator();
-        } else {
-          return Container();
-        }
-
 
     return Scaffold(
         appBar: AppBar(
-          title: Text('bloc todo first sample'),
+          title: Text('bloc todo first 샘플'),
         ),
-        body: ListView.builder(
+        body: BlocBuilder<TodosBloc, TodosState>(
+          builder: (context, state) {
+            if (state is TodosLoaded) {
+              final todos = state.todos;
+              return _fnDisTodosList(context, todosBloc, todos);
+            } else if (state is TodosLoading) {
+              todosBloc.dispatch(LoadTodos());
+              return LoadingIndicator();
+            } else {
+              return Container();
+            }
+          }
+        )
+    );
+  }
+
+  Widget _fnDisTodosList(BuildContext context, TodosBloc todosBloc, List<Todo> todos) {
+    return ListView.builder(
           itemCount: todos.length,
           itemBuilder: (context, index) {
             return ListTile(
@@ -69,16 +74,13 @@ class _MyHomePageState extends State<MyHomePage> {
               onTap: () {
                 Navigator.push(context, 
                   MaterialPageRoute(
-//                    builder: (context) => ListTodoDetail(description: todos[index].description),
+                    builder: (context) => ListTodoDetail(description: todos[index].note),
                   ),
                 );
               },
             );
           }
-        ),
-    );
-
-        }
     );
   }
+
 }
