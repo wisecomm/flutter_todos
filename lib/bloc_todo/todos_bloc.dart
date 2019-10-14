@@ -46,27 +46,27 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
 
   Stream<TodosState> _mapLoadTodosToState() async* {
     try {
-      /*
+      
       final todos = await _fetchPosts(0, 15);
       yield TodosLoaded(
         todos,
       );
-      */
 
-      
+      /*
       final List<Todo> todos = List.generate(
         20, (i) => Todo('Todo $i', 'A description of what needs to be done for Todo $i', note: 'Todo $i'));
       yield TodosLoaded(
         todos,
       );
+      */
       
-
-/*      
+      /*      
         final todos = await this.todosRepository.loadTodos();
       yield TodosLoaded(
         todos.map(Todo.fromEntity).toList(),
       );
-*/      
+      */
+            
     } catch (_) {
       yield TodosNotLoaded();
     }
@@ -78,7 +78,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     if (response.statusCode == 200) {
       final data = json.decode(response.body) as List;
       return data.map((rawPost) {
-        return Todo(rawPost['id'], rawPost['title'], note: rawPost['body']);
+        return Todo(rawPost['userId'].toString(), rawPost['id'].toString(), note: rawPost['title']);
       }).toList();
     } else {
       throw Exception('error fetching posts');

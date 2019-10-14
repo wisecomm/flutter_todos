@@ -70,7 +70,7 @@ class _MyHomePageState extends State<MyHomePage> {
           itemCount: todos.length,
           itemBuilder: (context, index) {
             return ListTile(
-              title: Text(todos[index].note),
+              title: Text(todos[index].id),
               onTap: () {
                 Navigator.push(context, 
                   MaterialPageRoute(
